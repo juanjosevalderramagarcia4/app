@@ -31,18 +31,6 @@ function mostrarPuntaje(){
     ctx.fillStyle = "black"
     ctx.fillText(`Puntaje: ${puntaje}`, 10, 50);
 }
-//Inutil
-// function algunaSeSalio(){
-//     for (let balon of balones){
-//         // se salió?
-//         if(balon.x >= 600 + balon.r || balon.x <= -balon.r || 
-//             balon.y >= 600 + balon.r || balon.y <= -balon.r )
-//         {
-//             return true;    
-//         }
-//     }
-//     return false;
-// }
 //Contabilizador de tiempo
 let initialTime = window.performance.now()
 function mostrarTiempo() {
@@ -79,7 +67,7 @@ canvas.onclick = quitarBalones;
 //DIBUJAR EN TODO EL CANVAS
 drawObj.draw =  function(){
     ctx.clearRect(0,0,1000,1000);
-    if (puntaje >= 10000){
+    if (puntaje >= 5000){
         clearInterval(mainInterval);
         ctx.font = "50px Arial";
         ctx.fillStyle = "green"
@@ -110,8 +98,8 @@ function crearParticula(){
     let nuevoBalon = Object.create(Balon)
     puntaje = puntaje + 10;
     //asignar x, y, vX y vY
-    nuevoBalon.x = 300
-    nuevoBalon.y = 280
+    nuevoBalon.x = 280
+    nuevoBalon.y = 270
     let ang = 2 * Math.PI* Math.random();
     // Genero el angulo de manera aleatoria
     // Math.random genera un numero aleatorio entre 0 y 1
@@ -123,22 +111,6 @@ function crearParticula(){
     balones.push(nuevoBalon);
     //console.log(balones)
 }
-    //2
-//function algunaSeSalio(){
-//    for (let balon of GAME.objects.balones){
-//        // se salió?
-//        if(balon.x >= 400 + balon.r || balon.x <= -balon.r ||
-//             balon.y >= 400 + balon.r || balon.y <= -balon.r )
-//         {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-//Al hacer click en la pelota roja se va a eliminar y va a agregar 10 puntos a todo
-//if(canvas.onclick) = clear
-
 function teclaPresionada(e){
     console.log(e.code)
     if (e.code == 'Space')
