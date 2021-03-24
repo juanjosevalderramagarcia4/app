@@ -32,38 +32,60 @@ function mostrarPuntaje(){
     ctx.fillText(`Puntaje: ${puntaje}`, 10, 50);
 }
 //Inutil
-function algunaSeSalio(){
-    for (let balon of balones){
-        // se salió?
-        if(balon.x >= 600 + balon.r || balon.x <= -balon.r || 
-            balon.y >= 600 + balon.r || balon.y <= -balon.r )
-        {
-            return true;    
-        }
-    }
-    return false;
-}
+// function algunaSeSalio(){
+//     for (let balon of balones){
+//         // se salió?
+//         if(balon.x >= 600 + balon.r || balon.x <= -balon.r || 
+//             balon.y >= 600 + balon.r || balon.y <= -balon.r )
+//         {
+//             return true;    
+//         }
+//     }
+//     return false;
+// }
 //Contabilizador de tiempo
 let initialTime = window.performance.now()
 function mostrarTiempo() {
-    console.log(window.performance.now())
+    //console.log(window.performance.now())
     ctx.font = "20px Arial";
     ctx.fillStyle = "black"
-    let tiempoRestante = 300000- (window.performance.now()-initialTime)
+    let tiempoRestante = 300000 - (window.performance.now()-initialTime)
     ctx.fillText(`Tiempo: ${Math.round(tiempoRestante/1000)}`, 10, 100);
 }
+function sePresiono(m){
+    for(Balon of balones){
+        let distancia = balon.x-m.offsetX;
+        let distanciaY = balon.y-m.offsetY;
+    if(distancia == 0 || distanciaY == 0)return true; 
+    }
+}
 
+function quitarBalones(e){
+    let indiceClickeado;
+    puntaje = puntaje + 20;
+    for(let i=0 ; i<balones.length ; i++){
+        let d = Math.sqrt(Math.pow(balones[i].x - e.offsetX , 2)+ Math.pow(balones[i].y - e.offsetY , 2));
+        if(d < balones[i].r && balones[i].color == "red"){
+            indiceClickeado=i;
+            break;
+            
+        }
+    }
+    if(!(indiceClickeado===undefined))
+    balones.splice(indiceClickeado,1)
+}
+canvas.onclick = quitarBalones;
 
 //DIBUJAR EN TODO EL CANVAS
 drawObj.draw =  function(){
-    ctx.clearRect(0,0,600,600);
-    if (puntaje >= 700){
+    ctx.clearRect(0,0,1000,1000);
+    if (puntaje >= 10000){
         clearInterval(mainInterval);
         ctx.font = "50px Arial";
         ctx.fillStyle = "green"
-        ctx.fillText(`GANASTE`, 30, 180);   
+        ctx.fillText(`GANASTE`, 170, 280);   
     }
-    if (puntaje < 90 && algunaSeSalio()&& mostrarTiempo()){
+    if (puntaje < 90 && mostrarTiempo()){
         // detener el juego
         clearInterval(mainInterval);
         if(mostrarTiempo()=0);
@@ -83,20 +105,13 @@ drawObj.draw =  function(){
 
 }
 run()
-//AYUDAAAAAAA:)
-//function teclaPresionada (space){
-    //console.log(teclaPresionada;
-    //if(q == space)
-//}
 
-//Funciones
-    //1
 function crearParticula(){
     let nuevoBalon = Object.create(Balon)
     puntaje = puntaje + 10;
     //asignar x, y, vX y vY
     nuevoBalon.x = 300
-    nuevoBalon.y = 200
+    nuevoBalon.y = 280
     let ang = 2 * Math.PI* Math.random();
     // Genero el angulo de manera aleatoria
     // Math.random genera un numero aleatorio entre 0 y 1
@@ -106,25 +121,20 @@ function crearParticula(){
     if(x<0.5) nuevoBalon.color = "red"
     // añado el nuevo balón al array de balones
     balones.push(nuevoBalon);
-    console.log(balones)
+    //console.log(balones)
 }
     //2
-function algunaSeSalio(){
-    for (let balon of GAME.objects.balones){
-        // se salió?
-        if(balon.x >= 400 + balon.r || balon.x <= -balon.r ||
-            balon.y >= 400 + balon.r || balon.y <= -balon.r )
-        {
-            return true;
-        }
-    }
-    return false;
-}
-if(canvas.onclick){
-    clearRect()
-    }
-// Al hacer click se va a ejecutar la función crear partícula
-canvas.onclick = crearParticula
+//function algunaSeSalio(){
+//    for (let balon of GAME.objects.balones){
+//        // se salió?
+//        if(balon.x >= 400 + balon.r || balon.x <= -balon.r ||
+//             balon.y >= 400 + balon.r || balon.y <= -balon.r )
+//         {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
 
 //Al hacer click en la pelota roja se va a eliminar y va a agregar 10 puntos a todo
 //if(canvas.onclick) = clear
@@ -133,11 +143,7 @@ function teclaPresionada(e){
     console.log(e.code)
     if (e.code == 'Space')
     {
-        console.log(e.shiftKey)
-        if(e.shiftKey) GAME.reset();
-        else{
-            if(GAME.running) GAME.pause();
-            else GAME.play();
-        }
+        crearParticula();
     }
 }
+document.onkeydown = teclaPresionada;
